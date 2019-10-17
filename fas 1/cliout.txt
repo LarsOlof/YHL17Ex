@@ -1,0 +1,671 @@
+[larson@srv1 ~(keystone)]$ openstack project list
++----------------------------------+------------------------------------------------------------------+
+| ID                               | Name                                                             |
++----------------------------------+------------------------------------------------------------------+
+| 0c8ec74d179144bd85db92f262678c1a | delsbo                                                           |
+| 0dcb5831a3344dfbb0f3f176a03382f9 | service                                                          |
+| 2af40b1ac6954e1a866cbbc678f35d87 | admin                                                            |
+| f24fd30ae2864123a6fc85d04e5d4e5d | 2af40b1ac6954e1a866cbbc678f35d87-f02c3962-1a77-423e-ab5f-dbe00b4 |
++----------------------------------+------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack image list
++--------------------------------------+---------------+--------+
+| ID                                   | Name          | Status |
++--------------------------------------+---------------+--------+
+| 38cd6020-b763-4caa-8e10-7a9ff65aea58 | CentOS-7      | active |
+| 85451208-b79b-4afd-8c58-1f259b1688c1 | CentOS7-local | active |
+| 4bea711f-f247-4abf-b037-7ab113b7fccd | CirrOS4       | active |
+| 770cabbc-9fcd-49fa-901e-4a5666c0733b | Ubuntu1804    | active |
++--------------------------------------+---------------+--------+
+[larson@srv1 ~(keystone)]$ openstack image show CirrOS4
++------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field            | Value                                                                                                                                                                                      |
++------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| checksum         | 443b7623e27ecf03dc9e01ee93f67afe                                                                                                                                                           |
+| container_format | bare                                                                                                                                                                                       |
+| created_at       | 2019-09-19T10:14:52Z                                                                                                                                                                       |
+| disk_format      | qcow2                                                                                                                                                                                      |
+| file             | /v2/images/4bea711f-f247-4abf-b037-7ab113b7fccd/file                                                                                                                                       |
+| id               | 4bea711f-f247-4abf-b037-7ab113b7fccd                                                                                                                                                       |
+| min_disk         | 0                                                                                                                                                                                          |
+| min_ram          | 0                                                                                                                                                                                          |
+| name             | CirrOS4                                                                                                                                                                                    |
+| owner            | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                           |
+| properties       | os_hash_algo='sha512', os_hash_value='6513f21e44aa3da349f248188a44bc304a3653a04122d8fb4535423c8e1d14cd6a153f735bb0982e2161b5b5186106570c17a9e58b64dd39390617cd5a350f78', os_hidden='False' |
+| protected        | False                                                                                                                                                                                      |
+| schema           | /v2/schemas/image                                                                                                                                                                          |
+| size             | 12716032                                                                                                                                                                                   |
+| status           | active                                                                                                                                                                                     |
+| tags             |                                                                                                                                                                                            |
+| updated_at       | 2019-09-19T10:14:52Z                                                                                                                                                                       |
+| virtual_size     | None                                                                                                                                                                                       |
+| visibility       | public                                                                                                                                                                                     |
++------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack service list
++----------------------------------+-----------+----------------+
+| ID                               | Name      | Type           |
++----------------------------------+-----------+----------------+
+| 09240af7864643e1b97251455ed05048 | nova      | compute        |
+| 1713be8b9ba146d5a71bb2ced3435f42 | neutron   | network        |
+| 6eeebe787d274da1a778e375b5f4c464 | barbican  | key-manager    |
+| 753a768c336c4bc4a97bfe60ad8b7f8c | keystone  | identity       |
+| 8e84c49956b446f6b9bb31eb035853fe | heat-cfn  | cloudformation |
+| b2096ec3c1b644beaeac1e561a1400a0 | placement | placement      |
+| c30e209963554aa09e80757bdacaf72a | designate | dns            |
+| d075c8ad8f79411e85707b8cccf8d120 | heat      | orchestration  |
+| deea91b8572944a4bb64165a62df589c | glance    | image          |
+| fa9d02f5e2f148aa8ac0fea91592d437 | cinderv3  | volumev3       |
++----------------------------------+-----------+----------------+
+[larson@srv1 ~(keystone)]$ openstack endpoint list
++----------------------------------+-----------+--------------+----------------+---------+-----------+---------------------------------------------+
+| ID                               | Region    | Service Name | Service Type   | Enabled | Interface | URL                                         |
++----------------------------------+-----------+--------------+----------------+---------+-----------+---------------------------------------------+
+| 079b30bbace84b71a5c2328e6d0d6797 | RegionOne | placement    | placement      | True    | admin     | http://10.11.12.101:8778                    |
+| 086408abe50f45a0b974f43c754693e3 | RegionOne | glance       | image          | True    | admin     | http://10.11.12.101:9292                    |
+| 1c7874ee9889463d9de420b08c06d1d4 | RegionOne | heat-cfn     | cloudformation | True    | admin     | http://10.11.12.102:8000/v1                 |
+| 1d7569c404d54af78c22be12993dd319 | RegionOne | heat         | orchestration  | True    | admin     | http://10.11.12.102:8004/v1/%(tenant_id)s   |
+| 2b5eb6d93eb94dd38da3be37997153ee | RegionOne | cinderv3     | volumev3       | True    | admin     | http://10.11.12.101:8776/v3/%(tenant_id)s   |
+| 2b9bcf33f94a402e9ea44d512ebec602 | RegionOne | heat-cfn     | cloudformation | True    | internal  | http://10.11.12.102:8000/v1                 |
+| 3bea77c3d118428ab51fe75b9e8dbf93 | RegionOne | placement    | placement      | True    | public    | http://10.11.12.101:8778                    |
+| 4d9376a2cc4341bd826743cb754109b0 | RegionOne | barbican     | key-manager    | True    | internal  | http://10.11.12.101:9311                    |
+| 5e58f6dd7471485a814fc6c6fa1bcab2 | RegionOne | keystone     | identity       | True    | public    | http://10.11.12.101:5000/v3/                |
+| 606da8ff196f470596484695caacbb90 | RegionOne | neutron      | network        | True    | internal  | http://10.11.12.101:9696                    |
+| 685d3bbfe5584fccbc0d67a1959735a1 | RegionOne | heat         | orchestration  | True    | internal  | http://10.11.12.102:8004/v1/%(tenant_id)s   |
+| 735e601cd45e4a238e09e0658b2264a1 | RegionOne | designate    | dns            | True    | internal  | http://10.11.12.102:9001/                   |
+| 76210113c61e49caab1642b6ded6381e | RegionOne | nova         | compute        | True    | admin     | http://10.11.12.101:8774/v2.1/%(tenant_id)s |
+| 7645ed87a6c7446a8e0575060a2c3394 | RegionOne | barbican     | key-manager    | True    | admin     | http://10.11.12.101:9311                    |
+| 7d894cb425a9477d8756eb1bcd3981c2 | RegionOne | neutron      | network        | True    | public    | http://10.11.12.101:9696                    |
+| 7d9900b028b74e66b04198222547df5b | RegionOne | nova         | compute        | True    | internal  | http://10.11.12.101:8774/v2.1/%(tenant_id)s |
+| 7de5da05fc634e88ad872c19b1e11a37 | RegionOne | heat         | orchestration  | True    | public    | http://10.11.12.102:8004/v1/%(tenant_id)s   |
+| 810635afbfd640b782a9bef6d96d8138 | RegionOne | glance       | image          | True    | internal  | http://10.11.12.101:9292                    |
+| 81f90d70172c477ab8189e18f665270a | RegionOne | glance       | image          | True    | public    | http://10.11.12.101:9292                    |
+| 838a595dc1634f60968a9cceaa972f71 | RegionOne | designate    | dns            | True    | public    | http://10.11.12.102:9001/                   |
+| 8b27d249f6aa418ebc7daae067fb753f | RegionOne | heat-cfn     | cloudformation | True    | public    | http://10.11.12.102:8000/v1                 |
+| 94e9eada0e984b1d9befa1e2ef6bbba1 | RegionOne | nova         | compute        | True    | public    | http://10.11.12.101:8774/v2.1/%(tenant_id)s |
+| 97e789556983443eaa6dc949e2dd9fe2 | RegionOne | designate    | dns            | True    | admin     | http://10.11.12.102:9001/                   |
+| 9ccd80e61f6541a2952a1de8b6a04481 | RegionOne | cinderv3     | volumev3       | True    | public    | http://10.11.12.101:8776/v3/%(tenant_id)s   |
+| 9dd05b60e58944fdba5a3efbe4e71f69 | RegionOne | placement    | placement      | True    | internal  | http://10.11.12.101:8778                    |
+| a636a35a7f124e739b89620c1349e9f8 | RegionOne | neutron      | network        | True    | admin     | http://10.11.12.101:9696                    |
+| ac7f884481c741f6b354eada4c8556a2 | RegionOne | barbican     | key-manager    | True    | public    | http://10.11.12.101:9311                    |
+| b7e89de4550a41b0a8a64d23aa3e38dd | RegionOne | keystone     | identity       | True    | admin     | http://10.11.12.101:5000/v3/                |
+| da163966495e4da2b2179e4c377d239f | RegionOne | keystone     | identity       | True    | internal  | http://10.11.12.101:5000/v3/                |
+| e0d0658f6b95414ca94e1bd6ed450e5d | RegionOne | cinderv3     | volumev3       | True    | internal  | http://10.11.12.101:8776/v3/%(tenant_id)s   |
++----------------------------------+-----------+--------------+----------------+---------+-----------+---------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack compute service list
++----+------------------+----------------------+----------+---------+-------+----------------------------+
+| ID | Binary           | Host                 | Zone     | Status  | State | Updated At                 |
++----+------------------+----------------------+----------+---------+-------+----------------------------+
+|  6 | nova-consoleauth | srv1.openstack.local | internal | enabled | up    | 2019-10-03T08:06:00.000000 |
+|  7 | nova-conductor   | srv1.openstack.local | internal | enabled | up    | 2019-10-03T08:06:04.000000 |
+|  8 | nova-scheduler   | srv1.openstack.local | internal | enabled | up    | 2019-10-03T08:06:00.000000 |
+|  9 | nova-compute     | srv3.openstack.local | nova     | enabled | up    | 2019-10-03T08:06:02.000000 |
+| 10 | nova-compute     | srv1.openstack.local | nova     | enabled | up    | 2019-10-03T08:05:59.000000 |
++----+------------------+----------------------+----------+---------+-------+----------------------------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack network agent list
++--------------------------------------+--------------------+----------------------+-------------------+-------+-------+---------------------------+
+| ID                                   | Agent Type         | Host                 | Availability Zone | Alive | State | Binary                    |
++--------------------------------------+--------------------+----------------------+-------------------+-------+-------+---------------------------+
+| 3a953072-b898-4c4b-8919-6d6c680f1cd8 | Open vSwitch agent | srv1.openstack.local | None              | :-)   | UP    | neutron-openvswitch-agent |
+| 3b56494a-cb96-45bd-8b1e-5af84d0a0b4b | Metadata agent     | srv1.openstack.local | None              | :-)   | UP    | neutron-metadata-agent    |
+| 6447d62e-1899-4d98-9e02-36747340bbc3 | L3 agent           | srv1.openstack.local | nova              | :-)   | UP    | neutron-l3-agent          |
+| 7b2fb750-2256-4947-954a-ee05b9ba657c | DHCP agent         | srv2.openstack.local | nova              | :-)   | UP    | neutron-dhcp-agent        |
+| 88b646ae-b2c3-4962-9477-32887d138040 | L3 agent           | srv2.openstack.local | nova              | :-)   | UP    | neutron-l3-agent          |
+| 985ef23f-7cb6-461b-bfdc-997548f98e5e | DHCP agent         | srv1.openstack.local | nova              | :-)   | UP    | neutron-dhcp-agent        |
+| ad6b34fa-8a65-4ab1-b6be-26d885d197ff | Metadata agent     | srv2.openstack.local | None              | :-)   | UP    | neutron-metadata-agent    |
+| c84e285a-36d6-4851-b97e-bc0c07f7dacc | Open vSwitch agent | srv2.openstack.local | None              | :-)   | UP    | neutron-openvswitch-agent |
+| e4e60bb9-668a-4314-a19d-963fb7099254 | Open vSwitch agent | srv3.openstack.local | None              | :-)   | UP    | neutron-openvswitch-agent |
++--------------------------------------+--------------------+----------------------+-------------------+-------+-------+---------------------------+
+[larson@srv1 ~(keystone)]$ openstack network list
++--------------------------------------+---------+--------------------------------------+
+| ID                                   | Name    | Subnets                              |
++--------------------------------------+---------+--------------------------------------+
+| 6b768fe0-ba63-456d-a219-41908aabebc5 | ext_net | 9ab5e294-9ee9-404b-aa8b-f894eb06405b |
+| ff430ba4-c13c-4db5-9367-ba7b60a6dfb9 | int_net | d30a975f-5f8c-4554-afa1-14057ae505dc |
++--------------------------------------+---------+--------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack subnet list
++--------------------------------------+---------+--------------------------------------+------------------+
+| ID                                   | Name    | Network                              | Subnet           |
++--------------------------------------+---------+--------------------------------------+------------------+
+| 9ab5e294-9ee9-404b-aa8b-f894eb06405b | subnet2 | 6b768fe0-ba63-456d-a219-41908aabebc5 | 10.11.12.0/24    |
+| d30a975f-5f8c-4554-afa1-14057ae505dc | subnet1 | ff430ba4-c13c-4db5-9367-ba7b60a6dfb9 | 192.168.100.0/24 |
++--------------------------------------+---------+--------------------------------------+------------------+
+[larson@srv1 ~(keystone)]$ openstack network show ext_net
++---------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field                     | Value                                                                                                                                                                              |
++---------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| admin_state_up            | UP                                                                                                                                                                                 |
+| availability_zone_hints   |                                                                                                                                                                                    |
+| availability_zones        | nova                                                                                                                                                                               |
+| created_at                | 2019-09-27T10:38:56Z                                                                                                                                                               |
+| description               |                                                                                                                                                                                    |
+| dns_domain                | None                                                                                                                                                                               |
+| id                        | 6b768fe0-ba63-456d-a219-41908aabebc5                                                                                                                                               |
+| ipv4_address_scope        | None                                                                                                                                                                               |
+| ipv6_address_scope        | None                                                                                                                                                                               |
+| is_default                | False                                                                                                                                                                              |
+| is_vlan_transparent       | None                                                                                                                                                                               |
+| location                  | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None}) |
+| mtu                       | 1500                                                                                                                                                                               |
+| name                      | ext_net                                                                                                                                                                            |
+| port_security_enabled     | True                                                                                                                                                                               |
+| project_id                | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                   |
+| provider:network_type     | flat                                                                                                                                                                               |
+| provider:physical_network | physnet1                                                                                                                                                                           |
+| provider:segmentation_id  | None                                                                                                                                                                               |
+| qos_policy_id             | None                                                                                                                                                                               |
+| revision_number           | 2                                                                                                                                                                                  |
+| router:external           | External                                                                                                                                                                           |
+| segments                  | None                                                                                                                                                                               |
+| shared                    | False                                                                                                                                                                              |
+| status                    | ACTIVE                                                                                                                                                                             |
+| subnets                   | 9ab5e294-9ee9-404b-aa8b-f894eb06405b                                                                                                                                               |
+| tags                      |                                                                                                                                                                                    |
+| updated_at                | 2019-09-27T10:41:54Z                                                                                                                                                               |
++---------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack subnet show subnet1
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field             | Value                                                                                                                                                                              |
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| allocation_pools  | 192.168.100.2-192.168.100.254                                                                                                                                                      |
+| cidr              | 192.168.100.0/24                                                                                                                                                                   |
+| created_at        | 2019-09-27T10:36:29Z                                                                                                                                                               |
+| description       |                                                                                                                                                                                    |
+| dns_nameservers   | 1.1.1.1                                                                                                                                                                            |
+| enable_dhcp       | True                                                                                                                                                                               |
+| gateway_ip        | 192.168.100.1                                                                                                                                                                      |
+| host_routes       |                                                                                                                                                                                    |
+| id                | d30a975f-5f8c-4554-afa1-14057ae505dc                                                                                                                                               |
+| ip_version        | 4                                                                                                                                                                                  |
+| ipv6_address_mode | None                                                                                                                                                                               |
+| ipv6_ra_mode      | None                                                                                                                                                                               |
+| location          | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None}) |
+| name              | subnet1                                                                                                                                                                            |
+| network_id        | ff430ba4-c13c-4db5-9367-ba7b60a6dfb9                                                                                                                                               |
+| prefix_length     | None                                                                                                                                                                               |
+| project_id        | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                   |
+| revision_number   | 0                                                                                                                                                                                  |
+| segment_id        | None                                                                                                                                                                               |
+| service_types     |                                                                                                                                                                                    |
+| subnetpool_id     | None                                                                                                                                                                               |
+| tags              |                                                                                                                                                                                    |
+| updated_at        | 2019-09-27T10:36:29Z                                                                                                                                                               |
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack security group list
++--------------------------------------+------------+------------------------+----------------------------------+------+
+| ID                                   | Name       | Description            | Project                          | Tags |
++--------------------------------------+------------+------------------------+----------------------------------+------+
+| 368aa599-07cf-4bbc-a57b-ceabaa44265a | default    | Default security group | 0dcb5831a3344dfbb0f3f176a03382f9 | []   |
+| 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae | default    | Default security group | 0c8ec74d179144bd85db92f262678c1a | []   |
+| 6ece0e66-2fcc-49c4-972a-f16780fff235 | default    | Default security group |                                  | []   |
+| 8958a64c-f90b-4fad-8c28-3ee6a744b09b | secgroup01 | secgroup01             | 2af40b1ac6954e1a866cbbc678f35d87 | []   |
+| ea07120a-3834-40c1-9749-650a05803262 | default    | Default security group | 2af40b1ac6954e1a866cbbc678f35d87 | []   |
++--------------------------------------+------------+------------------------+----------------------------------+------+
+[larson@srv1 ~(keystone)]$ openstack security group show secgroup01
++-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field           | Value                                                                                                                                                                                                                                          |
++-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| created_at      | 2019-09-29T15:38:05Z                                                                                                                                                                                                                           |
+| description     | secgroup01                                                                                                                                                                                                                                     |
+| id              | 8958a64c-f90b-4fad-8c28-3ee6a744b09b                                                                                                                                                                                                           |
+| location        | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None})                                                             |
+| name            | secgroup01                                                                                                                                                                                                                                     |
+| project_id      | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                                                                               |
+| revision_number | 3                                                                                                                                                                                                                                              |
+| rules           | created_at='2019-09-29T16:45:16Z', direction='ingress', ethertype='IPv4', id='3d966e0c-2edd-4031-8093-ee9fd457a10e', port_range_max='22', port_range_min='22', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at='2019-09-29T16:45:16Z' |
+|                 | created_at='2019-09-29T15:38:05Z', direction='egress', ethertype='IPv4', id='5139b16a-a7db-4f63-8483-d7a24e2efe5f', updated_at='2019-09-29T15:38:05Z'                                                                                          |
+|                 | created_at='2019-09-29T16:44:19Z', direction='ingress', ethertype='IPv4', id='ddd82b1a-6a26-48eb-9a71-574ac9cfdd52', protocol='icmp', remote_ip_prefix='0.0.0.0/0', updated_at='2019-09-29T16:44:19Z'                                          |
+|                 | created_at='2019-09-29T15:38:05Z', direction='egress', ethertype='IPv6', id='e408eec4-6ab8-44c3-9da6-0fcacc276dc2', updated_at='2019-09-29T15:38:05Z'                                                                                          |
+| tags            | []                                                                                                                                                                                                                                             |
+| updated_at      | 2019-09-29T16:45:16Z                                                                                                                                                                                                                           |
++-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack flavor list
++----+----------+------+------+-----------+-------+-----------+
+| ID | Name     |  RAM | Disk | Ephemeral | VCPUs | Is Public |
++----+----------+------+------+-----------+-------+-----------+
+| 0  | m1.small | 2048 |   10 |         0 |     1 | True      |
++----+----------+------+------+-----------+-------+-----------+
+[larson@srv1 ~(keystone)]$ openstack flavor show m1.small
++----------------------------+----------+
+| Field                      | Value    |
++----------------------------+----------+
+| OS-FLV-DISABLED:disabled   | False    |
+| OS-FLV-EXT-DATA:ephemeral  | 0        |
+| access_project_ids         | None     |
+| disk                       | 10       |
+| id                         | 0        |
+| name                       | m1.small |
+| os-flavor-access:is_public | True     |
+| properties                 |          |
+| ram                        | 2048     |
+| rxtx_factor                | 1.0      |
+| swap                       |          |
+| vcpus                      | 1        |
++----------------------------+----------+
+[larson@srv1 ~(keystone)]$ openstack image list
++--------------------------------------+---------------+--------+
+| ID                                   | Name          | Status |
++--------------------------------------+---------------+--------+
+| 38cd6020-b763-4caa-8e10-7a9ff65aea58 | CentOS-7      | active |
+| 85451208-b79b-4afd-8c58-1f259b1688c1 | CentOS7-local | active |
+| 4bea711f-f247-4abf-b037-7ab113b7fccd | CirrOS4       | active |
+| 770cabbc-9fcd-49fa-901e-4a5666c0733b | Ubuntu1804    | active |
++--------------------------------------+---------------+--------+
+[larson@srv1 ~(keystone)]$ openstack image show CirrOS4
++------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field            | Value                                                                                                                                                                                      |
++------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| checksum         | 443b7623e27ecf03dc9e01ee93f67afe                                                                                                                                                           |
+| container_format | bare                                                                                                                                                                                       |
+| created_at       | 2019-09-19T10:14:52Z                                                                                                                                                                       |
+| disk_format      | qcow2                                                                                                                                                                                      |
+| file             | /v2/images/4bea711f-f247-4abf-b037-7ab113b7fccd/file                                                                                                                                       |
+| id               | 4bea711f-f247-4abf-b037-7ab113b7fccd                                                                                                                                                       |
+| min_disk         | 0                                                                                                                                                                                          |
+| min_ram          | 0                                                                                                                                                                                          |
+| name             | CirrOS4                                                                                                                                                                                    |
+| owner            | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                           |
+| properties       | os_hash_algo='sha512', os_hash_value='6513f21e44aa3da349f248188a44bc304a3653a04122d8fb4535423c8e1d14cd6a153f735bb0982e2161b5b5186106570c17a9e58b64dd39390617cd5a350f78', os_hidden='False' |
+| protected        | False                                                                                                                                                                                      |
+| schema           | /v2/schemas/image                                                                                                                                                                          |
+| size             | 12716032                                                                                                                                                                                   |
+| status           | active                                                                                                                                                                                     |
+| tags             |                                                                                                                                                                                            |
+| updated_at       | 2019-09-19T10:14:52Z                                                                                                                                                                       |
+| virtual_size     | None                                                                                                                                                                                       |
+| visibility       | public                                                                                                                                                                                     |
++------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack keypair list
++-------+-------------------------------------------------+
+| Name  | Fingerprint                                     |
++-------+-------------------------------------------------+
+| mykey | 42:08:37:62:7c:83:cc:df:9e:37:74:b0:d1:e6:8c:35 |
++-------+-------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack server list
++--------------------------------------+----------------------+--------+---------------------------------------+----------+----------+
+| ID                                   | Name                 | Status | Networks                              | Image    | Flavor   |
++--------------------------------------+----------------------+--------+---------------------------------------+----------+----------+
+| 337cd8ad-0cb1-477d-9ddf-3a3bc19ab818 | Heat_Deployed_Server | ACTIVE | int_net=192.168.100.114               | CentOS-7 | m1.small |
+| 8f15d003-6d64-4c23-9f7a-fac6d865e8fb | Cirr4                | ACTIVE | int_net=192.168.100.245, 10.11.12.241 | CirrOS4  | m1.small |
++--------------------------------------+----------------------+--------+---------------------------------------+----------+----------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack server show Cirr4
++-------------------------------------+----------------------------------------------------------+
+| Field                               | Value                                                    |
++-------------------------------------+----------------------------------------------------------+
+| OS-DCF:diskConfig                   | MANUAL                                                   |
+| OS-EXT-AZ:availability_zone         | nova                                                     |
+| OS-EXT-SRV-ATTR:host                | srv3.openstack.local                                     |
+| OS-EXT-SRV-ATTR:hypervisor_hostname | srv3.openstack.local                                     |
+| OS-EXT-SRV-ATTR:instance_name       | instance-00000017                                        |
+| OS-EXT-STS:power_state              | Running                                                  |
+| OS-EXT-STS:task_state               | None                                                     |
+| OS-EXT-STS:vm_state                 | active                                                   |
+| OS-SRV-USG:launched_at              | 2019-09-29T15:49:39.000000                               |
+| OS-SRV-USG:terminated_at            | None                                                     |
+| accessIPv4                          |                                                          |
+| accessIPv6                          |                                                          |
+| addresses                           | int_net=192.168.100.245, 10.11.12.241                    |
+| config_drive                        |                                                          |
+| created                             | 2019-09-29T15:49:30Z                                     |
+| flavor                              | m1.small (0)                                             |
+| hostId                              | 5794408dd28e24e882edc00c7b6066ab2d7156739157333b129b1998 |
+| id                                  | 8f15d003-6d64-4c23-9f7a-fac6d865e8fb                     |
+| image                               | CirrOS4 (4bea711f-f247-4abf-b037-7ab113b7fccd)           |
+| key_name                            | mykey                                                    |
+| name                                | Cirr4                                                    |
+| progress                            | 0                                                        |
+| project_id                          | 2af40b1ac6954e1a866cbbc678f35d87                         |
+| properties                          |                                                          |
+| security_groups                     | name='secgroup01'                                        |
+| status                              | ACTIVE                                                   |
+| updated                             | 2019-09-29T15:49:39Z                                     |
+| user_id                             | 26aa5d49c0494014a9507137b11e8473                         |
+| volumes_attached                    |                                                          |
++-------------------------------------+----------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack console url show Cirr4
++-------+---------------------------------------------------------------------------------------------+
+| Field | Value                                                                                       |
++-------+---------------------------------------------------------------------------------------------+
+| type  | novnc                                                                                       |
+| url   | http://10.11.12.101:6080/vnc_auto.html?path=%3Ftoken%3D8382b1ec-9309-4a2d-8c3a-fb73d9262082 |
++-------+---------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack security group list
++--------------------------------------+------------+------------------------+----------------------------------+------+
+| ID                                   | Name       | Description            | Project                          | Tags |
++--------------------------------------+------------+------------------------+----------------------------------+------+
+| 368aa599-07cf-4bbc-a57b-ceabaa44265a | default    | Default security group | 0dcb5831a3344dfbb0f3f176a03382f9 | []   |
+| 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae | default    | Default security group | 0c8ec74d179144bd85db92f262678c1a | []   |
+| 6ece0e66-2fcc-49c4-972a-f16780fff235 | default    | Default security group |                                  | []   |
+| 8958a64c-f90b-4fad-8c28-3ee6a744b09b | secgroup01 | secgroup01             | 2af40b1ac6954e1a866cbbc678f35d87 | []   |
+| ea07120a-3834-40c1-9749-650a05803262 | default    | Default security group | 2af40b1ac6954e1a866cbbc678f35d87 | []   |
++--------------------------------------+------------+------------------------+----------------------------------+------+
+[larson@srv1 ~(keystone)]$ openstack security group show secgroup01
++-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field           | Value                                                                                                                                                                                                                                          |
++-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| created_at      | 2019-09-29T15:38:05Z                                                                                                                                                                                                                           |
+| description     | secgroup01                                                                                                                                                                                                                                     |
+| id              | 8958a64c-f90b-4fad-8c28-3ee6a744b09b                                                                                                                                                                                                           |
+| location        | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None})                                                             |
+| name            | secgroup01                                                                                                                                                                                                                                     |
+| project_id      | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                                                                               |
+| revision_number | 3                                                                                                                                                                                                                                              |
+| rules           | created_at='2019-09-29T16:45:16Z', direction='ingress', ethertype='IPv4', id='3d966e0c-2edd-4031-8093-ee9fd457a10e', port_range_max='22', port_range_min='22', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at='2019-09-29T16:45:16Z' |
+|                 | created_at='2019-09-29T15:38:05Z', direction='egress', ethertype='IPv4', id='5139b16a-a7db-4f63-8483-d7a24e2efe5f', updated_at='2019-09-29T15:38:05Z'                                                                                          |
+|                 | created_at='2019-09-29T16:44:19Z', direction='ingress', ethertype='IPv4', id='ddd82b1a-6a26-48eb-9a71-574ac9cfdd52', protocol='icmp', remote_ip_prefix='0.0.0.0/0', updated_at='2019-09-29T16:44:19Z'                                          |
+|                 | created_at='2019-09-29T15:38:05Z', direction='egress', ethertype='IPv6', id='e408eec4-6ab8-44c3-9da6-0fcacc276dc2', updated_at='2019-09-29T15:38:05Z'                                                                                          |
+| tags            | []                                                                                                                                                                                                                                             |
+| updated_at      | 2019-09-29T16:45:16Z                                                                                                                                                                                                                           |
++-----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack security group rule list
++--------------------------------------+-------------+-----------+------------+--------------------------------------+--------------------------------------+
+| ID                                   | IP Protocol | IP Range  | Port Range | Remote Security Group                | Security Group                       |
++--------------------------------------+-------------+-----------+------------+--------------------------------------+--------------------------------------+
+| 0d585672-956f-4c56-89f2-e860b75191e4 | None        | None      |            | None                                 | 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae |
+| 1145f42b-e133-476b-a807-502053e1cbff | None        | None      |            | 368aa599-07cf-4bbc-a57b-ceabaa44265a | 368aa599-07cf-4bbc-a57b-ceabaa44265a |
+| 1c356269-eb85-48c0-83fb-085f1928ed1b | None        | None      |            | ea07120a-3834-40c1-9749-650a05803262 | ea07120a-3834-40c1-9749-650a05803262 |
+| 3d966e0c-2edd-4031-8093-ee9fd457a10e | tcp         | 0.0.0.0/0 | 22:22      | None                                 | 8958a64c-f90b-4fad-8c28-3ee6a744b09b |
+| 4c7ff9fc-66d7-4d13-82e1-ad3661b42eda | None        | None      |            | None                                 | 368aa599-07cf-4bbc-a57b-ceabaa44265a |
+| 50aeaeec-44e0-4f81-bcfd-6cada7b91667 | None        | None      |            | None                                 | 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae |
+| 5139b16a-a7db-4f63-8483-d7a24e2efe5f | None        | None      |            | None                                 | 8958a64c-f90b-4fad-8c28-3ee6a744b09b |
+| 513d6be5-ca8a-465e-bf6b-0a9e84c92599 | None        | None      |            | 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae | 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae |
+| 5ff5e257-da84-421f-942a-9c893b5ae52b | None        | None      |            | ea07120a-3834-40c1-9749-650a05803262 | ea07120a-3834-40c1-9749-650a05803262 |
+| 6a3e4502-9bd5-49d6-948a-6d925ee91bd5 | None        | None      |            | None                                 | 6ece0e66-2fcc-49c4-972a-f16780fff235 |
+| a65df8e0-4ee5-47ec-8474-d40ba621548a | None        | None      |            | None                                 | ea07120a-3834-40c1-9749-650a05803262 |
+| af655ad8-1259-4b6f-b949-110df370dc51 | None        | None      |            | None                                 | ea07120a-3834-40c1-9749-650a05803262 |
+| c7ea3478-64ac-4180-a2a6-474c8d0da25a | None        | None      |            | None                                 | 6ece0e66-2fcc-49c4-972a-f16780fff235 |
+| cb447a3e-3bb7-4fdc-8333-220d2e8ea783 | None        | None      |            | None                                 | 368aa599-07cf-4bbc-a57b-ceabaa44265a |
+| d2e96463-e934-485e-a8d8-e92108794625 | None        | None      |            | 6ece0e66-2fcc-49c4-972a-f16780fff235 | 6ece0e66-2fcc-49c4-972a-f16780fff235 |
+| d3f03aba-80be-43a7-a208-b31c9fa6e697 | None        | None      |            | 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae | 6a7e98ff-ac0c-4801-9ad0-9cf024f27aae |
+| ddd82b1a-6a26-48eb-9a71-574ac9cfdd52 | icmp        | 0.0.0.0/0 |            | None                                 | 8958a64c-f90b-4fad-8c28-3ee6a744b09b |
+| e408eec4-6ab8-44c3-9da6-0fcacc276dc2 | None        | None      |            | None                                 | 8958a64c-f90b-4fad-8c28-3ee6a744b09b |
+| f94cc773-316b-43b1-a416-6d86cebc9005 | None        | None      |            | 6ece0e66-2fcc-49c4-972a-f16780fff235 | 6ece0e66-2fcc-49c4-972a-f16780fff235 |
+| ffbfe9b2-63ae-4e8e-a9e2-d58f27f10e07 | None        | None      |            | 368aa599-07cf-4bbc-a57b-ceabaa44265a | 368aa599-07cf-4bbc-a57b-ceabaa44265a |
++--------------------------------------+-------------+-----------+------------+--------------------------------------+--------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack security group rule show 3d966e0c-2edd-4031-8093-ee9fd457a10e
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field             | Value                                                                                                                                                                              |
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| created_at        | 2019-09-29T16:45:16Z                                                                                                                                                               |
+| description       |                                                                                                                                                                                    |
+| direction         | ingress                                                                                                                                                                            |
+| ether_type        | IPv4                                                                                                                                                                               |
+| id                | 3d966e0c-2edd-4031-8093-ee9fd457a10e                                                                                                                                               |
+| location          | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None}) |
+| name              | None                                                                                                                                                                               |
+| port_range_max    | 22                                                                                                                                                                                 |
+| port_range_min    | 22                                                                                                                                                                                 |
+| project_id        | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                   |
+| protocol          | tcp                                                                                                                                                                                |
+| remote_group_id   | None                                                                                                                                                                               |
+| remote_ip_prefix  | 0.0.0.0/0                                                                                                                                                                          |
+| revision_number   | 0                                                                                                                                                                                  |
+| security_group_id | 8958a64c-f90b-4fad-8c28-3ee6a744b09b                                                                                                                                               |
+| tags              | []                                                                                                                                                                                 |
+| updated_at        | 2019-09-29T16:45:16Z                                                                                                                                                               |
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack router list
++--------------------------------------+----------+--------+-------+----------------------------------+-------------+-------+
+| ID                                   | Name     | Status | State | Project                          | Distributed | HA    |
++--------------------------------------+----------+--------+-------+----------------------------------+-------------+-------+
+| 8b31d7f2-6620-4833-876a-d2b30baafa71 | router01 | ACTIVE | UP    | 2af40b1ac6954e1a866cbbc678f35d87 | False       | False |
++--------------------------------------+----------+--------+-------+----------------------------------+-------------+-------+
+[larson@srv1 ~(keystone)]$ openstack router show router01
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field                   | Value                                                                                                                                                                                    |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| admin_state_up          | UP                                                                                                                                                                                       |
+| availability_zone_hints |                                                                                                                                                                                          |
+| availability_zones      | nova                                                                                                                                                                                     |
+| created_at              | 2019-09-27T10:33:26Z                                                                                                                                                                     |
+| description             |                                                                                                                                                                                          |
+| distributed             | False                                                                                                                                                                                    |
+| external_gateway_info   | {"network_id": "6b768fe0-ba63-456d-a219-41908aabebc5", "enable_snat": true, "external_fixed_ips": [{"subnet_id": "9ab5e294-9ee9-404b-aa8b-f894eb06405b", "ip_address": "10.11.12.215"}]} |
+| flavor_id               | None                                                                                                                                                                                     |
+| ha                      | False                                                                                                                                                                                    |
+| id                      | 8b31d7f2-6620-4833-876a-d2b30baafa71                                                                                                                                                     |
+| interfaces_info         | [{"subnet_id": "d30a975f-5f8c-4554-afa1-14057ae505dc", "ip_address": "192.168.100.1", "port_id": "f1d96fdb-401c-4f7d-88ca-78ce4fba279f"}]                                                |
+| location                | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None})       |
+| name                    | router01                                                                                                                                                                                 |
+| project_id              | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                         |
+| revision_number         | 4                                                                                                                                                                                        |
+| routes                  |                                                                                                                                                                                          |
+| status                  | ACTIVE                                                                                                                                                                                   |
+| tags                    |                                                                                                                                                                                          |
+| updated_at              | 2019-09-27T10:43:06Z                                                                                                                                                                     |
++-------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack network rbac list
++--------------------------------------+-------------+--------------------------------------+
+| ID                                   | Object Type | Object ID                            |
++--------------------------------------+-------------+--------------------------------------+
+| 3485fcb4-fc6f-4e12-b0dc-cc8b6f8810d2 | network     | ff430ba4-c13c-4db5-9367-ba7b60a6dfb9 |
+| 66751cb5-0c7a-4021-b813-63248ecc24b4 | network     | 6b768fe0-ba63-456d-a219-41908aabebc5 |
+| 960babb9-6e66-439f-9072-7c8975cfa73a | network     | ff430ba4-c13c-4db5-9367-ba7b60a6dfb9 |
++--------------------------------------+-------------+--------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack network rbac show 3485fcb4-fc6f-4e12-b0dc-cc8b6f8810d2
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field             | Value                                                                                                                                                                              |
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| action            | access_as_shared                                                                                                                                                                   |
+| id                | 3485fcb4-fc6f-4e12-b0dc-cc8b6f8810d2                                                                                                                                               |
+| location          | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None}) |
+| name              | None                                                                                                                                                                               |
+| object_id         | ff430ba4-c13c-4db5-9367-ba7b60a6dfb9                                                                                                                                               |
+| object_type       | network                                                                                                                                                                            |
+| project_id        | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                   |
+| target_project_id | *                                                                                                                                                                                  |
++-------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack floating ip list
++--------------------------------------+---------------------+------------------+--------------------------------------+--------------------------------------+----------------------------------+
+| ID                                   | Floating IP Address | Fixed IP Address | Port                                 | Floating Network                     | Project                          |
++--------------------------------------+---------------------+------------------+--------------------------------------+--------------------------------------+----------------------------------+
+| ceb9fc35-371d-4999-94d1-65edfa04737b | 10.11.12.241        | 192.168.100.245  | d51d84a1-5f08-4fe7-b8b6-d62c75f2ecbf | 6b768fe0-ba63-456d-a219-41908aabebc5 | 2af40b1ac6954e1a866cbbc678f35d87 |
++--------------------------------------+---------------------+------------------+--------------------------------------+--------------------------------------+----------------------------------+
+[larson@srv1 ~(keystone)]$ openstack floating ip show 10.11.12.241
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Field               | Value                                                                                                                                                                                                              |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| created_at          | 2019-09-29T16:48:00Z                                                                                                                                                                                               |
+| description         |                                                                                                                                                                                                                    |
+| dns_domain          | None                                                                                                                                                                                                               |
+| dns_name            | None                                                                                                                                                                                                               |
+| fixed_ip_address    | 192.168.100.245                                                                                                                                                                                                    |
+| floating_ip_address | 10.11.12.241                                                                                                                                                                                                       |
+| floating_network_id | 6b768fe0-ba63-456d-a219-41908aabebc5                                                                                                                                                                               |
+| id                  | ceb9fc35-371d-4999-94d1-65edfa04737b                                                                                                                                                                               |
+| location            | Munch({'project': Munch({'domain_name': 'default', 'domain_id': None, 'name': 'admin', 'id': u'2af40b1ac6954e1a866cbbc678f35d87'}), 'cloud': '', 'region_name': '', 'zone': None})                                 |
+| name                | 10.11.12.241                                                                                                                                                                                                       |
+| port_details        | admin_state_up='True', device_id='8f15d003-6d64-4c23-9f7a-fac6d865e8fb', device_owner='compute:nova', mac_address='fa:16:3e:30:0d:51', name='', network_id='ff430ba4-c13c-4db5-9367-ba7b60a6dfb9', status='ACTIVE' |
+| port_id             | d51d84a1-5f08-4fe7-b8b6-d62c75f2ecbf                                                                                                                                                                               |
+| project_id          | 2af40b1ac6954e1a866cbbc678f35d87                                                                                                                                                                                   |
+| qos_policy_id       | None                                                                                                                                                                                                               |
+| revision_number     | 2                                                                                                                                                                                                                  |
+| router_id           | 8b31d7f2-6620-4833-876a-d2b30baafa71                                                                                                                                                                               |
+| status              | ACTIVE                                                                                                                                                                                                             |
+| subnet_id           | None                                                                                                                                                                                                               |
+| tags                | []                                                                                                                                                                                                                 |
+| updated_at          | 2019-09-29T16:49:27Z                                                                                                                                                                                               |
++---------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack volume service list
++------------------+--------------------------+------+---------+-------+----------------------------+
+| Binary           | Host                     | Zone | Status  | State | Updated At                 |
++------------------+--------------------------+------+---------+-------+----------------------------+
+| cinder-scheduler | srv1.openstack.local     | nova | enabled | up    | 2019-10-03T08:27:41.000000 |
+| cinder-volume    | srv2.openstack.local@nfs | nova | enabled | up    | 2019-10-03T08:27:38.000000 |
++------------------+--------------------------+------+---------+-------+----------------------------+
+[larson@srv1 ~(keystone)]$ openstack volume list
++--------------------------------------+--------+-----------+------+-------------+
+| ID                                   | Name   | Status    | Size | Attached to |
++--------------------------------------+--------+-----------+------+-------------+
+| a384bd80-01a7-4825-8317-adb9df4e7c6f | disk04 | available |   10 |             |
++--------------------------------------+--------+-----------+------+-------------+
+[larson@srv1 ~(keystone)]$ openstack volume show disk04
++--------------------------------+--------------------------------------+
+| Field                          | Value                                |
++--------------------------------+--------------------------------------+
+| attachments                    | []                                   |
+| availability_zone              | nova                                 |
+| bootable                       | false                                |
+| consistencygroup_id            | None                                 |
+| created_at                     | 2019-09-29T09:41:15.000000           |
+| description                    | None                                 |
+| encrypted                      | False                                |
+| id                             | a384bd80-01a7-4825-8317-adb9df4e7c6f |
+| migration_status               | None                                 |
+| multiattach                    | False                                |
+| name                           | disk04                               |
+| os-vol-host-attr:host          | srv2.openstack.local@nfs#Generic_NFS |
+| os-vol-mig-status-attr:migstat | None                                 |
+| os-vol-mig-status-attr:name_id | None                                 |
+| os-vol-tenant-attr:tenant_id   | 2af40b1ac6954e1a866cbbc678f35d87     |
+| properties                     |                                      |
+| replication_status             | None                                 |
+| size                           | 10                                   |
+| snapshot_id                    | None                                 |
+| source_volid                   | None                                 |
+| status                         | available                            |
+| type                           | None                                 |
+| updated_at                     | 2019-09-29T09:41:17.000000           |
+| user_id                        | 26aa5d49c0494014a9507137b11e8473     |
++--------------------------------+--------------------------------------+
+[larson@srv1 ~(keystone)]$ 
+
+
+[larson@srv1 ~(keystone)]$ openstack stack list
++--------------------------------------+--------------+----------------------------------+-----------------+----------------------+--------------+
+| ID                                   | Stack Name   | Project                          | Stack Status    | Creation Time        | Updated Time |
++--------------------------------------+--------------+----------------------------------+-----------------+----------------------+--------------+
+| f02c3962-1a77-423e-ab5f-dbe00b454470 | Sample-Stack | 2af40b1ac6954e1a866cbbc678f35d87 | CREATE_COMPLETE | 2019-10-01T12:14:48Z | None         |
++--------------------------------------+--------------+----------------------------------+-----------------+----------------------+--------------+
+[larson@srv1 ~(keystone)]$ openstack stack show Sample-Stack
++-----------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Field                 | Value                                                                                                                         |
++-----------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| id                    | f02c3962-1a77-423e-ab5f-dbe00b454470                                                                                          |
+| stack_name            | Sample-Stack                                                                                                                  |
+| description           | Heat Sample Template                                                                                                          |
+| creation_time         | 2019-10-01T12:14:48Z                                                                                                          |
+| updated_time          | None                                                                                                                          |
+| stack_status          | CREATE_COMPLETE                                                                                                               |
+| stack_status_reason   | Stack CREATE completed successfully                                                                                           |
+| parameters            | ImageID: CentOS-7                                                                                                             |
+|                       | NetID: ff430ba4-c13c-4db5-9367-ba7b60a6dfb9                                                                                   |
+|                       | OS::project_id: 2af40b1ac6954e1a866cbbc678f35d87                                                                              |
+|                       | OS::stack_id: f02c3962-1a77-423e-ab5f-dbe00b454470                                                                            |
+|                       | OS::stack_name: Sample-Stack                                                                                                  |
+|                       |                                                                                                                               |
+| outputs               | - description: IP address of the server in the private network                                                                |
+|                       |   output_key: server1_private_ip                                                                                              |
+|                       |   output_value: 192.168.100.114                                                                                               |
+|                       |                                                                                                                               |
+| links                 | - href: http://10.11.12.102:8004/v1/2af40b1ac6954e1a866cbbc678f35d87/stacks/Sample-Stack/f02c3962-1a77-423e-ab5f-dbe00b454470 |
+|                       |   rel: self                                                                                                                   |
+|                       |                                                                                                                               |
+| parent                | None                                                                                                                          |
+| disable_rollback      | True                                                                                                                          |
+| deletion_time         | None                                                                                                                          |
+| stack_user_project_id | f24fd30ae2864123a6fc85d04e5d4e5d                                                                                              |
+| capabilities          | []                                                                                                                            |
+| notification_topics   | []                                                                                                                            |
+| stack_owner           | None                                                                                                                          |
+| timeout_mins          | None                                                                                                                          |
+| tags                  | None                                                                                                                          |
++-----------------------+-------------------------------------------------------------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack secret list
++--------------------------------------------------------------------------+----------+---------------------------+--------+-------------------------------------------+-----------+------------+-------------+------+------------+
+| Secret href                                                              | Name     | Created                   | Status | Content types                             | Algorithm | Bit length | Secret type | Mode | Expiration |
++--------------------------------------------------------------------------+----------+---------------------------+--------+-------------------------------------------+-----------+------------+-------------+------+------------+
+| http://10.11.12.101:9311/v1/secrets/a9719dec-a37a-4d9f-b396-d275c6728c12 | secret01 | 2019-09-30T18:52:15+00:00 | ACTIVE | {u'default': u'text/plain'}               | aes       |        256 | opaque      | cbc  | None       |
+| http://10.11.12.101:9311/v1/secrets/5b1691da-84e9-41a8-8bf2-0b20bda1c896 | secret02 | 2019-09-30T18:55:45+00:00 | ACTIVE | {u'default': u'application/octet-stream'} | aes       |        256 | symmetric   | cbc  | None       |
++--------------------------------------------------------------------------+----------+---------------------------+--------+-------------------------------------------+-----------+------------+-------------+------+------------+
+[larson@srv1 ~(keystone)]$ openstack secret show secret01
+openstack: 'secret show secret01' is not an openstack command. See 'openstack --help'.
+Did you mean one of these?
+  secret container create
+  secret container delete
+  secret container get
+  secret container list
+  secret delete
+  secret get
+  secret list
+  secret order create
+  secret order delete
+  secret order get
+  secret order list
+  secret store
+  secret update
+  security group create
+  security group delete
+  security group list
+  security group rule create
+  security group rule delete
+  security group rule list
+  security group rule show
+  security group set
+  security group show
+  security group unset
+[larson@srv1 ~(keystone)]$ openstack secret get secret01
+Secret incorrectly specified.
+[larson@srv1 ~(keystone)]$ openstack secret get http://10.11.12.101:9311/v1/secrets/a9719dec-a37a-4d9f-b396-d275c6728c12
++---------------+--------------------------------------------------------------------------+
+| Field         | Value                                                                    |
++---------------+--------------------------------------------------------------------------+
+| Secret href   | http://10.11.12.101:9311/v1/secrets/a9719dec-a37a-4d9f-b396-d275c6728c12 |
+| Name          | secret01                                                                 |
+| Created       | 2019-09-30T18:52:15+00:00                                                |
+| Status        | ACTIVE                                                                   |
+| Content types | {u'default': u'text/plain'}                                              |
+| Algorithm     | aes                                                                      |
+| Bit length    | 256                                                                      |
+| Secret type   | opaque                                                                   |
+| Mode          | cbc                                                                      |
+| Expiration    | None                                                                     |
++---------------+--------------------------------------------------------------------------+
+[larson@srv1 ~(keystone)]$ openstack secret get http://10.11.12.101:9311/v1/secrets/a9719dec-a37a-4d9f-b396-d275c6728c12 --payload
++---------+-----------+
+| Field   | Value     |
++---------+-----------+
+| Payload | secretkey |
++---------+-----------+
+[larson@srv1 ~(keystone)]$ 
+
+[larson@srv1 ~(keystone)]$ openstack dns service list
++--------------------------------------+----------------------+--------------+--------+-------+--------------+
+| id                                   | hostname             | service_name | status | stats | capabilities |
++--------------------------------------+----------------------+--------------+--------+-------+--------------+
+| 75ec305c-c17d-4776-bc47-470ccd61635d | srv2.openstack.local | central      | UP     | -     | -            |
+| ad41d9e1-10bb-48f9-887b-d4d9b2540442 | srv2.openstack.local | api          | UP     | -     | -            |
+| 5701165b-52b7-47fe-bcd9-4f04e59ce113 | srv2.openstack.local | worker       | UP     | -     | -            |
+| 6b7ffcac-d473-4fec-9ecd-6d33d39322d0 | srv2.openstack.local | mdns         | UP     | -     | -            |
+| bdbdfbb6-6511-4412-87f6-c381833e8b83 | srv2.openstack.local | producer     | UP     | -     | -            |
++--------------------------------------+----------------------+--------------+--------+-------+--------------+
+[larson@srv1 ~(keystone)]$ openstack zone list
++--------------------------------------+---------------------------+---------+------------+--------+--------+
+| id                                   | name                      | type    |     serial | status | action |
++--------------------------------------+---------------------------+---------+------------+--------+--------+
+| 0b93c40f-7c31-4ea3-a07b-27be26fdf275 | server.education.         | PRIMARY | 1569879081 | ACTIVE | NONE   |
+| 00014841-51e7-4f94-bacc-516b01606b6b | 100.168.192.in-addr.arpa. | PRIMARY | 1569879351 | ACTIVE | NONE   |
++--------------------------------------+---------------------------+---------+------------+--------+--------+
+[larson@srv1 ~(keystone)]$ openstack recordset list server.educatione.
+Name server.educatione. didn't resolve
+[larson@srv1 ~(keystone)]$ openstack recordset list server.education.
++--------------------------------------+-----------------------+------+----------------------------------------------------------------------------------+--------+--------+
+| id                                   | name                  | type | records                                                                          | status | action |
++--------------------------------------+-----------------------+------+----------------------------------------------------------------------------------+--------+--------+
+| 04e5368a-3a7b-40c6-a7bf-eeffe1a979a7 | server.education.     | NS   | srv2.openstack.local.                                                            | ACTIVE | NONE   |
+| 7f125e27-b0a8-4c70-ad21-d8e80f516dfc | server.education.     | SOA  | srv2.openstack.local. dnsmaster.server.education. 1569879081 3503 600 86400 3600 | ACTIVE | NONE   |
+| d1006894-e107-4002-9cfc-af4b6eaf9478 | www.server.education. | A    | 192.168.100.10                                                                   | ACTIVE | NONE   |
++--------------------------------------+-----------------------+------+----------------------------------------------------------------------------------+--------+--------+
+[larson@srv1 ~(keystone)]$ 

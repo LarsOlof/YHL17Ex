@@ -1,0 +1,19 @@
+    1  sudo apt-get update
+    2  sudo apt-get dist-upgrade
+    5  sudo reboot
+    6  sudo git clone https://opendev.org/openstack/openstack-ansible /opt/openstack-ansible
+    9  cd /opt/openstack-ansible/
+   10  git tag -l
+   12  git describe --abbrev=0 --tags
+   13  git describe
+   15  git checkout stein
+   17  sudo git branch -a
+   20  sudo git checkout stable/stein
+   21  sudo git branch -a
+   22  sudo scripts/bootstrap-ansible.sh 
+   26  sudo scripts/bootstrap-aio.sh 
+   27  cd /opt/openstack-ansible/playbooks
+   28  sudo openstack-ansible setup-hosts.yml 
+   29  sudo openstack-ansible setup-infrastructure.yml 
+   30  sudo openstack-ansible setup-openstack.yml 
+reboot
